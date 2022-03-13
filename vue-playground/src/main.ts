@@ -1,4 +1,20 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import { createRouter, createWebHashHistory } from "vue-router";
+import App from "./App.vue";
+import "virtual:windi.css";
 
-createApp(App).mount('#app')
+const routes = [
+  { path: "/", component: () => import("./routes/Home.vue") },
+  { path: "/about", component: () => import("./routes/About.vue") },
+];
+
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes,
+});
+
+const app = createApp(App);
+
+app.use(router);
+
+app.mount("#app");
