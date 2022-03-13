@@ -1,22 +1,18 @@
 <template>
   <nav class="flex flex-row shadow justify-around">
-    <router-link v-for="route in routes" :key="route.path" :to="route.path">
-      {{
-        route.meta?.title ?? route.name ?? route.path
-      }}
-    </router-link>
+    <router-link
+      v-for="topRoute in topRoutes"
+      :key="topRoute.name"
+      :to="topRoute.path"
+    >{{ topRoute.meta?.title ?? topRoute.name ?? topRoute.path }}</router-link>
   </nav>
 </template>
 
 <script lang="ts" setup>
 import { computed } from "vue";
-import { useRouter } from "vue-router";
+import { rawRoutes } from "../routes/router";
 
-const router = useRouter();
-const routes = computed(() =>
-  router
-    .getRoutes()
-    .sort((a, b) => a.path.localeCompare(b.path))
-    .filter((r) => r.path.split("/").length < 3)
+const topRoutes = computed(() =>
+  rawRoutes.value
 );
 </script>
