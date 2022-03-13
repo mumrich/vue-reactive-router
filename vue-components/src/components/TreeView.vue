@@ -2,15 +2,17 @@
   <draggable v-model="itemsModel" :group="dragGroup" :itemKey="getElementKey">
     <template #item="{ element, index }">
       <template v-if="element.children">
-        <TreeViewItemToggle>
-          <span
-            class="cursor-pointer px-2"
-            :class="{
-              selected: selected === getKey(index),
-            }"
-            @click="onClick(index)"
-            >{{ getTitle(element, index) }}</span
-          >
+        <p>
+          <TreeViewItemToggle>
+          <div class="cursor-pointer px-2">
+            <slot name="title" v-bind="{element, index, selected}">
+              <span
+                :class="getClass(index)"
+                @click="onClick(index)"
+                >{{ getTitle(element, index) }}</span
+              >
+            </slot>
+          </div>
           <template v-slot:content>
             <div class="pl-3">
               <tree-view
@@ -26,17 +28,18 @@
             </div>
           </template>
         </TreeViewItemToggle>
+        </p>
       </template>
       <template v-else>
         <p>
-          <span
-            class="select-none ml-5 px-2 cursor-pointer"
-            :class="{
-              selected: selected === getKey(index),
-            }"
-            @click="onClick(index)"
-            >{{ getTitle(element, index) }}</span
-          >
+          <div class="select-none ml-5 px-2 cursor-pointer">
+            <slot name="title" v-bind="{element, index, selected}">
+              <span
+                :class="getClass(index)"
+                @click="onClick(index)"
+                >{{ getTitle(element, index) }}</span>
+            </slot>
+          </div>
         </p>
       </template>
     </template>
@@ -115,7 +118,14 @@ export default defineComponent({
       return props.showIndex ? `${i + 1}. ${treeItem.name}` : treeItem.name;
     }
 
+    function getClass(index: number) {
+      return {
+        selected: props.selected === getKey(index),
+      }
+    }
+
     return {
+      getClass,
       getElementKey,
       getKey,
       getTitle,
