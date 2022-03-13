@@ -18,32 +18,32 @@ import TreeViewVue from "../components/TreeView.vue";
 
 const items = ref<TreeItemType[]>([
   {
-    title: "Esther & Hans",
+    name: "Esther & Hans",
     children: [
       {
-        title: "Hannes",
+        name: "Hannes",
       },
       {
-        title: "Peter",
+        name: "Peter",
       },
       {
-        title: "Franziska",
+        name: "Franziska",
       },
       {
-        title: "Daniel",
+        name: "Daniel",
         children: [
           {
-            title: "Caitlyn",
+            name: "Caitlyn",
           },
         ],
       },
     ],
   },
   {
-    title: "Beatrice & Rudolf",
+    name: "Beatrice & Rudolf",
     children: [
       {
-        title: "Laura",
+        name: "Laura",
       },
     ],
   },

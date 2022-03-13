@@ -1,4 +1,4 @@
 declare type TreeItemType = {
-  title?: string;
+  name?: string;
   children?: TreeItemType[];
 };

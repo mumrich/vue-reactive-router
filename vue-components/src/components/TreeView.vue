@@ -1,5 +1,5 @@
 <template>
-  <draggable v-model="itemsModel" group="tree" :itemKey="getElementKey">
+  <draggable v-model="itemsModel" :group="dragGroup" :itemKey="getElementKey">
     <template #item="{ element, index }">
       <template v-if="element.children">
         <TreeViewItemToggle>
@@ -79,6 +79,11 @@ export default defineComponent({
       default: false,
       type: Boolean,
     },
+    dragGroup: {
+      required: false,
+      default: "tree",
+      type: String,
+    },
   },
   emits: {
     "update:items": (v: TreeItemType[]) => v,
@@ -92,7 +97,7 @@ export default defineComponent({
     });
 
     function getElementKey(treeItem: TreeItemType) {
-      return treeItem.title;
+      return treeItem.name;
     }
 
     function getKey(i: number) {
@@ -107,7 +112,7 @@ export default defineComponent({
     }
 
     function getTitle(treeItem: TreeItemType, i: number) {
-      return props.showIndex ? `${i + 1}. ${treeItem.title}` : treeItem.title;
+      return props.showIndex ? `${i + 1}. ${treeItem.name}` : treeItem.name;
     }
 
     return {
