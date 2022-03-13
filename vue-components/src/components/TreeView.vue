@@ -4,13 +4,9 @@
       <template v-if="element.children">
         <p>
           <TreeViewItemToggle>
-          <div class="cursor-pointer px-2">
+          <div class="title" :class="getClass(index)" @click="onClick(index)">
             <slot name="title" v-bind="{element, index, selected}">
-              <span
-                :class="getClass(index)"
-                @click="onClick(index)"
-                >{{ getTitle(element, index) }}</span
-              >
+              <span>{{ getTitle(element, index) }}</span>
             </slot>
           </div>
           <template v-slot:content>
@@ -24,20 +20,23 @@
                 @onSelect="$emit('onSelect', $event)"
                 @update:items="element.children = $event"
                 @update:selected="$emit('update:selected', $event)"
-              />
+              >
+                <template #title="{element, index, selected}">
+                  <slot name="title" v-bind="{element, index, selected}">
+                    <span>{{ getTitle(element, index) }}</span>
+                  </slot>
+                </template>
+              </tree-view>
             </div>
           </template>
         </TreeViewItemToggle>
         </p>
       </template>
       <template v-else>
-        <p>
-          <div class="select-none ml-5 px-2 cursor-pointer">
+        <p class="select-none ml-5">
+          <div class="title" :class="getClass(index)" @click="onClick(index)">
             <slot name="title" v-bind="{element, index, selected}">
-              <span
-                :class="getClass(index)"
-                @click="onClick(index)"
-                >{{ getTitle(element, index) }}</span>
+              <span>{{ getTitle(element, index) }}</span>
             </slot>
           </div>
         </p>
@@ -137,9 +136,19 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.title {
+  @apply cursor-pointer px-2 py-1;
+  @apply flex items-center;
+}
+
+.title:hover {
+  @apply shadow;
+  @apply rounded-lg;
+}
+
 .selected {
   @apply bg-gray-200;
   @apply rounded-lg;
-  @apply shadow;
+  @apply shadow-sm;
 }
 </style>
