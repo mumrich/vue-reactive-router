@@ -1,11 +1,23 @@
 import { createApp } from "vue";
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import App from "./App.vue";
 import "virtual:windi.css";
 
-const routes = [
-  { path: "/", component: () => import("./routes/Home.vue") },
-  { path: "/about", component: () => import("./routes/About.vue") },
+const routes: RouteRecordRaw[] = [
+  {
+    path: "/",
+    component: () => import("./routes/Home.vue"),
+    meta: {
+      title: "Home",
+    },
+  },
+  {
+    path: "/about",
+    component: () => import("./routes/About.vue"),
+    meta: {
+      title: "About",
+    },
+  },
 ];
 
 const router = createRouter({
