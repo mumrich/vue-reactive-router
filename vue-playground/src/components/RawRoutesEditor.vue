@@ -9,6 +9,11 @@
         <p class="ml-3">
           <input v-if="rawRoute.meta" v-model="rawRoute.meta.title" />
         </p>
+        <ol v-if="rawRoute.meta">
+          <li v-for="(widget, i) in rawRoute.meta.widgets" :key="i">
+            <WidgetEditor :widget="widget" />
+          </li>
+        </ol>
       </li>
     </ol>
     <hr class="my-3" />
@@ -24,6 +29,7 @@
 import { ref, markRaw } from "vue";
 import { rawRoutes } from "../routes/router";
 import DynamicPageRendererVue from "../components/DynamicPageRenderer.vue";
+import WidgetEditor from "./WidgetEditor.vue";
 
 const newPath = ref<string | null>(null);
 const newTitle = ref<string | null>(null);
