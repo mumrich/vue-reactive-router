@@ -1,10 +1,11 @@
 <template>
   <TreeViewVue
-    :items="items"
-    v-model:selected="selected"
-    selectable
     @on-select="selectedItem = $event"
+    selectable
+    v-model:items="items"
+    v-model:selected="selected"
   />
+  <hr />
   <div>
     {{ selectedItem }}
   </div>
@@ -20,8 +21,16 @@ const items = ref<TreeItemType[]>([
     children: [
       {
         title: "Dada",
+        children: [
+          {
+            title: "Foo",
+          },
+        ],
       },
     ],
+  },
+  {
+    title: "Bar",
   },
 ]);
 const selected = ref<string | null>(null);

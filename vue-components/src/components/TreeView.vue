@@ -1,50 +1,57 @@
 <template>
-  <div v-for="(item, i) in items" :key="getKey(i)">
-    <template v-if="item.children">
-      <TreeViewItemToggle>
-        <span
-          class="cursor-pointer"
-          :class="{
-            selected: selected === getKey(i),
-          }"
-          @click="onClick(i)"
-          >{{ item.title }}</span
-        >
-        <template v-slot:content>
-          <div class="pl-3">
-            <tree-view
-              :items="item.children"
-              :parentKey="getKey(i)"
-              :selectable="selectable"
-              :selected="selected"
-              @onSelect="$emit('onSelect', $event)"
-              @update:selected="$emit('update:selected', $event)"
-            />
-          </div>
-        </template>
-      </TreeViewItemToggle>
+  <draggable v-model="itemsModel" group="tree" :itemKey="getElementKey">
+    <template #item="{ element, index }">
+      <template v-if="element.children">
+        <TreeViewItemToggle>
+          <span
+            class="cursor-pointer"
+            :class="{
+              selected: selected === getKey(index),
+            }"
+            @click="onClick(index)"
+            >{{ element.title }}</span
+          >
+          <template v-slot:content>
+            <div class="pl-3">
+              <tree-view
+                :items="element.children"
+                :parentKey="getKey(index)"
+                :selectable="selectable"
+                :selected="selected"
+                @onSelect="$emit('onSelect', $event)"
+                @update:items="element.children = $event"
+                @update:selected="$emit('update:selected', $event)"
+              />
+            </div>
+          </template>
+        </TreeViewItemToggle>
+      </template>
+      <template v-else>
+        <p>
+          <span
+            class="select-none px-2 cursor-pointer"
+            :class="{
+              selected: selected === getKey(index),
+            }"
+            @click="onClick(index)"
+            >{{ element.title }}</span
+          >
+        </p>
+      </template>
     </template>
-    <template v-else>
-      <span
-        class="select-none px-2 cursor-pointer"
-        :class="{
-          selected: selected === getKey(0),
-        }"
-        @click="onClick()"
-        >{{ item.title }}</span
-      >
-    </template>
-  </div>
+  </draggable>
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent } from "vue";
+import { PropType, defineComponent, computed } from "vue";
 import TreeViewItemToggle from "./TreeViewItemToggle.vue";
+import draggable from "vuedraggable";
 
 export default defineComponent({
   name: "tree-view",
   components: {
     TreeViewItemToggle,
+    draggable,
   },
   props: {
     items: {
@@ -68,10 +75,20 @@ export default defineComponent({
     },
   },
   emits: {
+    "update:items": (v: TreeItemType[]) => v,
     "update:selected": (v: string | null) => v,
     onSelect: (v: TreeItemType) => v,
   },
   setup(props, { emit }) {
+    const itemsModel = computed({
+      get: () => props.items,
+      set: (v) => emit("update:items", v),
+    });
+
+    function getElementKey(treeItem: TreeItemType) {
+      return treeItem.title;
+    }
+
     function getKey(i: number) {
       return props.parentKey ? `${props.parentKey};${i}` : `${i}`;
     }
@@ -86,6 +103,8 @@ export default defineComponent({
     return {
       getKey,
       onClick,
+      itemsModel,
+      getElementKey,
     };
   },
 });
