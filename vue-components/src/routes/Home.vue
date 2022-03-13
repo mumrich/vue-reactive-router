@@ -6,9 +6,9 @@
     v-model:selected="selected"
   />
   <hr />
-  <div>
-    {{ selectedItem }}
-  </div>
+  <p>selected: {{ selected }}</p>
+  <hr />
+  <p>selectedItem: {{ selectedItem }}</p>
 </template>
 
 <script lang="ts" setup>
