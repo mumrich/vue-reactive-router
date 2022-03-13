@@ -4,7 +4,10 @@
       <li v-for="(rawRoute, i) in rawRoutes">
         <p>
           {{ i + 1 }}. {{ rawRoute.path }}
-          <button class="bg-gray-300 hover:shadow px-3">-</button>
+          <button
+            class="bg-gray-300 hover:shadow px-3"
+            @click="onRemove(i)"
+          >-</button>
         </p>
         <p class="ml-3">
           <input v-if="rawRoute.meta" v-model="rawRoute.meta.title" />
@@ -34,6 +37,10 @@ import WidgetEditor from "./WidgetEditor.vue";
 const newPath = ref<string | null>(null);
 const newTitle = ref<string | null>(null);
 
+function onRemove(i: number) {
+  rawRoutes.value.splice(i, 1);
+}
+
 function onAdd() {
   if (newPath.value !== null && newTitle.value !== null) {
     const path = newPath.value;
@@ -44,8 +51,8 @@ function onAdd() {
       name: title.toLocaleLowerCase(),
       component: markRaw(DynamicPageRendererVue),
       meta: {
-        title
-      }
+        title,
+      },
     });
 
     newPath.value = null;

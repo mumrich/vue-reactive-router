@@ -42,6 +42,8 @@ export const router = createRouter({
 });
 
 watch(rawRoutes.value, (newVal) => {
+  router.getRoutes().forEach((r) => router.removeRoute(r.name!));
+
   newVal.forEach((r) => {
     router.addRoute(r);
   });
