@@ -4,12 +4,12 @@
       <template v-if="element.children">
         <TreeViewItemToggle>
           <span
-            class="cursor-pointer"
+            class="cursor-pointer px-2"
             :class="{
               selected: selected === getKey(index),
             }"
             @click="onClick(index)"
-            >{{ element.title }}</span
+            >{{ getTitle(element, index) }}</span
           >
           <template v-slot:content>
             <div class="pl-3">
@@ -18,6 +18,7 @@
                 :parentKey="getKey(index)"
                 :selectable="selectable"
                 :selected="selected"
+                :showIndex="showIndex"
                 @onSelect="$emit('onSelect', $event)"
                 @update:items="element.children = $event"
                 @update:selected="$emit('update:selected', $event)"
@@ -29,12 +30,12 @@
       <template v-else>
         <p>
           <span
-            class="select-none px-2 cursor-pointer"
+            class="select-none ml-5 px-2 cursor-pointer"
             :class="{
               selected: selected === getKey(index),
             }"
             @click="onClick(index)"
-            >{{ element.title }}</span
+            >{{ getTitle(element, index) }}</span
           >
         </p>
       </template>
@@ -73,6 +74,11 @@ export default defineComponent({
       default: null,
       type: String,
     },
+    showIndex: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
   },
   emits: {
     "update:items": (v: TreeItemType[]) => v,
@@ -100,11 +106,16 @@ export default defineComponent({
       }
     }
 
+    function getTitle(treeItem: TreeItemType, i: number) {
+      return props.showIndex ? `${i + 1}. ${treeItem.title}` : treeItem.title;
+    }
+
     return {
-      getKey,
-      onClick,
-      itemsModel,
       getElementKey,
+      getKey,
+      getTitle,
+      itemsModel,
+      onClick,
     };
   },
 });
@@ -114,5 +125,6 @@ export default defineComponent({
 .selected {
   @apply bg-gray-200;
   @apply rounded-lg;
+  @apply shadow;
 }
 </style>

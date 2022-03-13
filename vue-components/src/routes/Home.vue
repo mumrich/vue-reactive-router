@@ -4,6 +4,7 @@
     selectable
     v-model:items="items"
     v-model:selected="selected"
+    :show-index="false"
   />
   <hr />
   <p>selected: {{ selected }}</p>
@@ -17,20 +18,34 @@ import TreeViewVue from "../components/TreeView.vue";
 
 const items = ref<TreeItemType[]>([
   {
-    title: "Gugus",
+    title: "Esther & Hans",
     children: [
       {
-        title: "Dada",
+        title: "Hannes",
+      },
+      {
+        title: "Peter",
+      },
+      {
+        title: "Franziska",
+      },
+      {
+        title: "Daniel",
         children: [
           {
-            title: "Foo",
+            title: "Caitlyn",
           },
         ],
       },
     ],
   },
   {
-    title: "Bar",
+    title: "Beatrice & Rudolf",
+    children: [
+      {
+        title: "Laura",
+      },
+    ],
   },
 ]);
 const selected = ref<string | null>(null);
