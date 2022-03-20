@@ -16,7 +16,16 @@
     ],
     "types": [
       "unplugin-icons/types/vue",
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "mumrich-vue-components": [
+        "src/lib/main"
+      ]
+    },
+    "baseUrl": ".",
   },
   "include": [
     "src/**/*.ts",
