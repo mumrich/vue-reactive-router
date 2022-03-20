@@ -2,15 +2,25 @@
   <draggable v-model="itemsModel" :group="dragGroup" :itemKey="getElementKey">
     <template #item="{ element, index }">
       <TreeViewItem :showToggle="getShowToggle(element)">
-        <div class="title" :class="getClass(index)" @click="onClick(index)">
+        <div
+          class="title"
+          :class="getClass(index)"
+          @click="onClickSelect(index)"
+        >
           <slot name="title" v-bind="{ element, index, selected }">
             <span>{{ getTitle(element, index) }}</span>
           </slot>
         </div>
+        <span class="action">
+          <IconFluentDelete16Regular @click="onClickDelete(element, index)" />
+        </span>
+        <span class="action" @click="onClickAdd(element)">
+          <IconFluentAddCircle16Regular />
+        </span>
         <template v-slot:content>
           <div class="pl-3">
             <tree-view
-              :items="element.children"
+              :items="getChildren(element)"
               :parentKey="getKey(index)"
               :selectable="selectable"
               :selected="selected"
@@ -37,13 +47,17 @@ import { PropType, defineComponent, computed } from "vue";
 import TreeViewItemToggle from "./TreeViewItemToggle.vue";
 import draggable from "vuedraggable";
 import TreeViewItem from "./TreeViewItem.vue";
+import IconFluentDelete16Regular from "~icons/fluent/delete-16-regular";
+import IconFluentAddCircle16Regular from "~icons/fluent/add-circle-16-regular";
 
 export default defineComponent({
   name: "tree-view",
   components: {
+    IconFluentAddCircle16Regular,
+    IconFluentDelete16Regular,
+    TreeViewItem,
     TreeViewItemToggle,
     draggable,
-    TreeViewItem,
   },
   props: {
     items: {
@@ -82,7 +96,7 @@ export default defineComponent({
     onSelect: (v: TreeItemType) => v,
   },
   setup(props, { emit }) {
-    const itemsModel = computed({
+    const itemsModel = computed<TreeItemType[]>({
       get: () => props.items,
       set: (v) => emit("update:items", v),
     });
@@ -95,7 +109,7 @@ export default defineComponent({
       return props.parentKey ? `${props.parentKey};${i}` : `${i}`;
     }
 
-    function onClick(i: number = 0) {
+    function onClickSelect(i: number = 0) {
       if (props.selectable) {
         emit("update:selected", getKey(i));
         emit("onSelect", props.items[i]);
@@ -120,14 +134,40 @@ export default defineComponent({
       return false;
     }
 
+    function getChildren(treeItem: TreeItemType) {
+      return treeItem.children ?? [];
+    }
+
+    function onClickAdd(treeItem: TreeItemType) {
+      const defaultName = `child of '${treeItem.name}'`;
+      let newName = window.prompt("Name:") ?? defaultName;
+
+      if (newName.length === 0) {
+        newName = defaultName;
+      }
+
+      treeItem.children?.push({
+        name: newName,
+      });
+    }
+
+    function onClickDelete(treeItem: TreeItemType, index: number) {
+      if (window.confirm(`Really delete '${treeItem.name}'?`)) {
+        itemsModel.value.splice(index, 1);
+      }
+    }
+
     return {
+      getChildren,
       getClass,
       getElementKey,
       getKey,
       getShowToggle,
       getTitle,
       itemsModel,
-      onClick,
+      onClickAdd,
+      onClickDelete,
+      onClickSelect,
     };
   },
 });
@@ -135,12 +175,15 @@ export default defineComponent({
 
 <style scoped>
 .title {
-  @apply cursor-pointer px-2 py-1;
+  @apply cursor-pointer;
+  @apply px-2 py-1;
   @apply flex items-center;
+  @apply mr-1;
 }
 
 .title:hover {
   @apply shadow;
+  @apply bg-gray-100;
   @apply rounded-lg;
 }
 
@@ -148,5 +191,17 @@ export default defineComponent({
   @apply bg-gray-200;
   @apply rounded-lg;
   @apply shadow-sm;
+}
+
+.action {
+  @apply flex items-center;
+  @apply cursor-pointer;
+  @apply px-1 py-1;
+}
+
+.action:hover {
+  @apply shadow;
+  @apply rounded-lg;
+  @apply bg-gray-100;
 }
 </style>

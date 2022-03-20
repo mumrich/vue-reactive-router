@@ -10,8 +10,10 @@
     </p>
   </template>
   <template v-else>
-    <p class="ml-5">
-      <slot />
+    <p class="ml-5 flex flex-col">
+      <div class="flex items-center">
+        <slot />
+      </div>
       <slot name="content" />
     </p>
   </template>

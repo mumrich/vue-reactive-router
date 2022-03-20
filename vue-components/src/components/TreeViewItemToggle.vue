@@ -1,10 +1,10 @@
 <template>
   <ToggleVue>
     <template v-slot:toggled>
-      <IconBiChevronDown />
+      <IconBiChevronDown class="toggle-icon" />
     </template>
     <template v-slot:untoggled>
-      <IconBiChevronRight />
+      <IconBiChevronRight class="toggle-icon" />
     </template>
     <template v-slot:default>
       <slot name="default" />
@@ -20,3 +20,9 @@ import ToggleVue from "./Toggle.vue";
 import IconBiChevronDown from "~icons/bi/chevron-down";
 import IconBiChevronRight from "~icons/bi/chevron-right";
 </script>
+
+<style scoped>
+.toggle-icon {
+  @apply text-current;
+}
+</style>
