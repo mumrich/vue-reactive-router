@@ -48,13 +48,13 @@
 </template>
 
 <script lang="ts">
-import { PropType, defineComponent, computed } from "vue";
+import IconFluentAddCircle16Regular from "~icons/fluent/add-circle-16-regular";
+import IconFluentDelete16Regular from "~icons/fluent/delete-16-regular";
+import TreeViewItem from "./TreeViewItem.vue";
 import TreeViewItemToggle from "./TreeViewItemToggle.vue";
 import draggable from "vuedraggable";
-import TreeViewItem from "./TreeViewItem.vue";
-import IconFluentDelete16Regular from "~icons/fluent/delete-16-regular";
-import IconFluentAddCircle16Regular from "~icons/fluent/add-circle-16-regular";
 import { ITreeViewItem } from "@/contracts";
+import { PropType, defineComponent, computed } from "vue";
 
 export default defineComponent({
   name: "tree-view",
