@@ -1,46 +1,33 @@
 <template>
   <draggable v-model="itemsModel" :group="dragGroup" :itemKey="getElementKey">
     <template #item="{ element, index }">
-      <template v-if="element.children">
-        <p>
-          <TreeViewItemToggle>
-          <div class="title" :class="getClass(index)" @click="onClick(index)">
-            <slot name="title" v-bind="{element, index, selected}">
-              <span>{{ getTitle(element, index) }}</span>
-            </slot>
+      <TreeViewItem :showToggle="getShowToggle(element)">
+        <div class="title" :class="getClass(index)" @click="onClick(index)">
+          <slot name="title" v-bind="{ element, index, selected }">
+            <span>{{ getTitle(element, index) }}</span>
+          </slot>
+        </div>
+        <template v-slot:content>
+          <div class="pl-3">
+            <tree-view
+              :items="element.children"
+              :parentKey="getKey(index)"
+              :selectable="selectable"
+              :selected="selected"
+              :showIndex="showIndex"
+              @onSelect="$emit('onSelect', $event)"
+              @update:items="element.children = $event"
+              @update:selected="$emit('update:selected', $event)"
+            >
+              <template #title="{ element, index, selected }">
+                <slot name="title" v-bind="{ element, index, selected }">
+                  <span>{{ getTitle(element, index) }}</span>
+                </slot>
+              </template>
+            </tree-view>
           </div>
-          <template v-slot:content>
-            <div class="pl-3">
-              <tree-view
-                :items="element.children"
-                :parentKey="getKey(index)"
-                :selectable="selectable"
-                :selected="selected"
-                :showIndex="showIndex"
-                @onSelect="$emit('onSelect', $event)"
-                @update:items="element.children = $event"
-                @update:selected="$emit('update:selected', $event)"
-              >
-                <template #title="{element, index, selected}">
-                  <slot name="title" v-bind="{element, index, selected}">
-                    <span>{{ getTitle(element, index) }}</span>
-                  </slot>
-                </template>
-              </tree-view>
-            </div>
-          </template>
-        </TreeViewItemToggle>
-        </p>
-      </template>
-      <template v-else>
-        <p class="select-none ml-5">
-          <div class="title" :class="getClass(index)" @click="onClick(index)">
-            <slot name="title" v-bind="{element, index, selected}">
-              <span>{{ getTitle(element, index) }}</span>
-            </slot>
-          </div>
-        </p>
-      </template>
+        </template>
+      </TreeViewItem>
     </template>
   </draggable>
 </template>
@@ -49,12 +36,14 @@
 import { PropType, defineComponent, computed } from "vue";
 import TreeViewItemToggle from "./TreeViewItemToggle.vue";
 import draggable from "vuedraggable";
+import TreeViewItem from "./TreeViewItem.vue";
 
 export default defineComponent({
   name: "tree-view",
   components: {
     TreeViewItemToggle,
     draggable,
+    TreeViewItem,
   },
   props: {
     items: {
@@ -120,13 +109,22 @@ export default defineComponent({
     function getClass(index: number) {
       return {
         selected: props.selected === getKey(index),
+      };
+    }
+
+    function getShowToggle(treeItem: TreeItemType) {
+      if (treeItem.children) {
+        return treeItem.children.length > 0;
       }
+
+      return false;
     }
 
     return {
       getClass,
       getElementKey,
       getKey,
+      getShowToggle,
       getTitle,
       itemsModel,
       onClick,
