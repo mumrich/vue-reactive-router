@@ -1,4 +1,9 @@
 <template>
+  <div v-if="mainAdd" class="flex items-center">
+    <button class="action" @click="onClickAddMain">
+      <IconFluentAddCircle16Regular /><span class="ml-1">New Page</span>
+    </button>
+  </div>
   <draggable v-model="itemsModel" :group="dragGroup" :itemKey="getElementKey">
     <template #item="{ element, index }">
       <TreeViewItem :showToggle="getShowToggle(element)">
@@ -89,6 +94,11 @@ export default defineComponent({
       default: "tree",
       type: String,
     },
+    mainAdd: {
+      required: false,
+      default: false,
+      type: Boolean,
+    },
   },
   emits: {
     "update:items": (v: TreeItemType[]) => v,
@@ -138,6 +148,19 @@ export default defineComponent({
       return treeItem.children ?? [];
     }
 
+    function onClickAddMain() {
+      const defaultName = "new name";
+      let newName = window.prompt("Name:") ?? defaultName;
+
+      if (newName.length === 0) {
+        newName = defaultName;
+      }
+
+      itemsModel.value.push({
+        name: newName,
+      });
+    }
+
     function onClickAdd(treeItem: TreeItemType) {
       const defaultName = `child of '${treeItem.name}'`;
       let newName = window.prompt("Name:") ?? defaultName;
@@ -146,9 +169,15 @@ export default defineComponent({
         newName = defaultName;
       }
 
-      treeItem.children?.push({
+      const newItem = {
         name: newName,
-      });
+      };
+
+      if (treeItem.children) {
+        treeItem.children?.push(newItem);
+      }
+
+      treeItem.children = [newItem];
     }
 
     function onClickDelete(treeItem: TreeItemType, index: number) {
@@ -166,6 +195,7 @@ export default defineComponent({
       getTitle,
       itemsModel,
       onClickAdd,
+      onClickAddMain,
       onClickDelete,
       onClickSelect,
     };

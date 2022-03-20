@@ -8,6 +8,7 @@
         v-model:items="items"
         v-model:selected="selected"
         :show-index="false"
+        main-add
       >
         <template #title="{ element, index, selected }">
           <IconFluentDocumentOnePage20Regular />
