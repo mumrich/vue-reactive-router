@@ -28,10 +28,12 @@
   "files": [
     "dist"
   ],
+  "main": "./dist/mumrich-vue-components.umd.js",
   "module": "./dist/mumrich-vue-components.es.js",
   "exports": {
     ".": {
-      "import": "./dist/mumrich-vue-components.es.js"
+      "import": "./dist/mumrich-vue-components.es.js",
+      "require": "./dist/mumrich-vue-components.umd.js"
     }
   },
   "types": "./dist/types/index.d.ts"
