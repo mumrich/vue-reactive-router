@@ -1,21 +1,28 @@
 <template>
-  <TreeViewVue
-    @on-select="selectedItem = $event"
-    selectable
-    v-model:items="items"
-    v-model:selected="selected"
-    :show-index="false"
-  >
-    <template #title="{ element, index, selected }">
-      <IconFluentDocumentOnePage20Regular v-if="element.children" />
-      <IconDashiconsWelcomeWidgetMenus v-else />
-      <span> - {{ index + 1 }} - {{ element.name }}</span>
-    </template>
-  </TreeViewVue>
+  <div class="flex flex-row justify-around">
+    <div class="flex flex-col bg-gray-50 max-w-96">
+      <strong>Pages</strong>
+      <TreeViewVue
+        @on-select="selectedItem = $event"
+        selectable
+        v-model:items="items"
+        v-model:selected="selected"
+        :show-index="false"
+      >
+        <template #title="{ element, index, selected }">
+          <IconFluentDocumentOnePage20Regular />
+          <span> - {{ index + 1 }} - {{ element.name }}</span>
+        </template>
+      </TreeViewVue>
+    </div>
+    <div class="flex flex-col bg-gray-50 max-w-96">
+      <strong>Selected Page</strong>
+      <div class="flex flex-col" v-if="selectedItem">
+        <TreeItemEditor v-model="selectedItem" />
+      </div>
+    </div>
+  </div>
   <hr />
-  <p>selected: {{ selected }}</p>
-  <hr />
-  <p>selectedItem: {{ selectedItem }}</p>
 </template>
 
 <script lang="ts" setup>
@@ -23,6 +30,7 @@ import { ref } from "vue";
 import TreeViewVue from "../components/TreeView.vue";
 import IconFluentDocumentOnePage20Regular from "~icons/fluent/document-one-page-20-regular";
 import IconDashiconsWelcomeWidgetMenus from "~icons/dashicons/welcome-widgets-menus";
+import TreeItemEditor from "../components/TreeItemEditor.vue";
 
 const items = ref<TreeItemType[]>([
   {
