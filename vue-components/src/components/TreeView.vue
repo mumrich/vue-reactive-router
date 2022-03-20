@@ -54,6 +54,7 @@ import draggable from "vuedraggable";
 import TreeViewItem from "./TreeViewItem.vue";
 import IconFluentDelete16Regular from "~icons/fluent/delete-16-regular";
 import IconFluentAddCircle16Regular from "~icons/fluent/add-circle-16-regular";
+import { ITreeViewItem } from "@/contracts";
 
 export default defineComponent({
   name: "tree-view",
@@ -67,7 +68,7 @@ export default defineComponent({
   props: {
     items: {
       required: true,
-      type: Array as PropType<TreeItemType[]>,
+      type: Array as PropType<ITreeViewItem[]>,
     },
     selectable: {
       required: false,
@@ -99,19 +100,27 @@ export default defineComponent({
       default: false,
       type: Boolean,
     },
+    newItemInterceptor: {
+      required: false,
+      default: (newItem: ITreeViewItem, _parent: ITreeViewItem | null) =>
+        newItem,
+      type: Function as PropType<
+        (newItem: ITreeViewItem, parent: ITreeViewItem | null) => ITreeViewItem
+      >,
+    },
   },
   emits: {
-    "update:items": (v: TreeItemType[]) => v,
+    "update:items": (v: ITreeViewItem[]) => v,
     "update:selected": (v: string | null) => v,
-    onSelect: (v: TreeItemType) => v,
+    onSelect: (v: ITreeViewItem) => v,
   },
   setup(props, { emit }) {
-    const itemsModel = computed<TreeItemType[]>({
+    const itemsModel = computed<ITreeViewItem[]>({
       get: () => props.items,
       set: (v) => emit("update:items", v),
     });
 
-    function getElementKey(treeItem: TreeItemType) {
+    function getElementKey(treeItem: ITreeViewItem) {
       return treeItem.name;
     }
 
@@ -126,7 +135,7 @@ export default defineComponent({
       }
     }
 
-    function getTitle(treeItem: TreeItemType, i: number) {
+    function getTitle(treeItem: ITreeViewItem, i: number) {
       return props.showIndex ? `${i + 1}. ${treeItem.name}` : treeItem.name;
     }
 
@@ -136,7 +145,7 @@ export default defineComponent({
       };
     }
 
-    function getShowToggle(treeItem: TreeItemType) {
+    function getShowToggle(treeItem: ITreeViewItem) {
       if (treeItem.children) {
         return treeItem.children.length > 0;
       }
@@ -144,7 +153,7 @@ export default defineComponent({
       return false;
     }
 
-    function getChildren(treeItem: TreeItemType) {
+    function getChildren(treeItem: ITreeViewItem) {
       return treeItem.children ?? [];
     }
 
@@ -156,31 +165,39 @@ export default defineComponent({
         newName = defaultName;
       }
 
-      itemsModel.value.push({
-        name: newName,
-      });
+      const newItem: ITreeViewItem = props.newItemInterceptor(
+        {
+          name: newName,
+        },
+        null
+      );
+
+      itemsModel.value.push(newItem);
     }
 
-    function onClickAdd(treeItem: TreeItemType) {
-      const defaultName = `child of '${treeItem.name}'`;
+    function onClickAdd(parentTreeItem: ITreeViewItem) {
+      const defaultName = `child of '${parentTreeItem.name}'`;
       let newName = window.prompt("Name:") ?? defaultName;
 
       if (newName.length === 0) {
         newName = defaultName;
       }
 
-      const newItem = {
-        name: newName,
-      };
+      const newItem: ITreeViewItem = props.newItemInterceptor(
+        {
+          name: newName,
+        },
+        parentTreeItem
+      );
 
-      if (treeItem.children) {
-        treeItem.children?.push(newItem);
+      if (parentTreeItem.children) {
+        parentTreeItem.children?.push(newItem);
       }
 
-      treeItem.children = [newItem];
+      parentTreeItem.children = [newItem];
     }
 
-    function onClickDelete(treeItem: TreeItemType, index: number) {
+    function onClickDelete(treeItem: ITreeViewItem, index: number) {
       if (window.confirm(`Really delete '${treeItem.name}'?`)) {
         itemsModel.value.splice(index, 1);
       }

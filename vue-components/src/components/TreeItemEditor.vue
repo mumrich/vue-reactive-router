@@ -1,18 +1,21 @@
 <template>
   <div v-if="model">
-    <span>name: <input v-model="model.name" /></span>
+    <slot v-bind="{ model }">
+      <span>name: <input v-model="model.name" /></span>
+    </slot>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { ITreeViewItem } from "@/contracts";
 import { computed } from "vue";
 
 const props = defineProps<{
-  modelValue: TreeItemType;
+  modelValue: ITreeViewItem;
 }>();
 
 const emits = defineEmits<{
-  (e: "update:modelValue", mv: TreeItemType): void;
+  (e: "update:modelValue", mv: ITreeViewItem): void;
 }>();
 
 const model = computed({

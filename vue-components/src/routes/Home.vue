@@ -32,8 +32,9 @@ import TreeViewVue from "../components/TreeView.vue";
 import IconFluentDocumentOnePage20Regular from "~icons/fluent/document-one-page-20-regular";
 import IconDashiconsWelcomeWidgetMenus from "~icons/dashicons/welcome-widgets-menus";
 import TreeItemEditor from "../components/TreeItemEditor.vue";
+import { ITreeViewItem } from "@/contracts";
 
-const items = ref<TreeItemType[]>([
+const items = ref<ITreeViewItem[]>([
   {
     name: "Esther & Hans",
     children: [
@@ -132,5 +133,5 @@ const items = ref<TreeItemType[]>([
   },
 ]);
 const selected = ref<string | null>(null);
-const selectedItem = ref<TreeItemType | null>(null);
+const selectedItem = ref<ITreeViewItem | null>(null);
 </script>
