@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row justify-around">
-    <div class="flex flex-col bg-gray-50 max-w-96">
+    <div class="flex flex-col border max-w-96">
       <strong>Pages</strong>
       <TreeViewVue
         @on-select="selectedItem = $event"
@@ -12,11 +12,11 @@
       >
         <template #title="{ element, index, selected }">
           <IconFluentDocumentOnePage20Regular />
-          <span> - {{ index + 1 }} - {{ element.name }}</span>
+          <span>- {{ index + 1 }} - {{ element.name }}</span>
         </template>
       </TreeViewVue>
     </div>
-    <div class="flex flex-col bg-gray-50 max-w-96">
+    <div class="flex flex-col border max-w-96">
       <strong>Selected Page</strong>
       <div class="flex flex-col" v-if="selectedItem">
         <TreeItemEditor v-model="selectedItem" />

@@ -11,8 +11,9 @@
       />
     </div>
     <div v-if="selectedRouteRecord" class="flex flex-col">
-      <span>name: <input v-model="selectedRouteRecord.name" /></span>
-      <span>Title: <input v-model="selectedMetadata.title" /></span>
+      <InputFieldVue v-model="selectedRouteRecord.path" label="path" />
+      <InputFieldVue v-model="selectedRouteRecord.name" label="name" />
+      <InputFieldVue v-model="selectedMetadata.title" label="title" />
     </div>
   </div>
   <hr />
@@ -24,7 +25,7 @@
 import "mumrich-vue-components/style.css";
 import NavVue from "./components/Nav.vue";
 import { RouteRecordRaw } from "vue-router";
-import { TreeViewVue, ITreeViewItem } from "mumrich-vue-components";
+import { TreeViewVue, ITreeViewItem, InputFieldVue } from "mumrich-vue-components";
 import { computed, ref } from "vue";
 import { rawRoutes } from "./routes/router";
 

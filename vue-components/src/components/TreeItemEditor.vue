@@ -1,7 +1,7 @@
 <template>
   <div v-if="model">
     <slot v-bind="{ model }">
-      <span>name: <input v-model="model.name" /></span>
+      <InputField v-model="model.name" label="name" />
     </slot>
   </div>
 </template>
@@ -9,6 +9,7 @@
 <script lang="ts" setup>
 import { ITreeViewItem } from "@/contracts";
 import { computed } from "vue";
+import InputField from "./InputField.vue";
 
 const props = defineProps<{
   modelValue: ITreeViewItem;
