@@ -3,12 +3,7 @@
     <div>
       <hr />
       <nav class="flex flex-row justify-around">
-        <router-link to="/" class="flex flex-row"
-          ><img alt="Vue logo" src="./assets/logo.png" class="w-10" />
-          Home</router-link
-        >
-        <router-link to="/h">H</router-link>
-        <router-link to="/widgets">Widgets</router-link>
+        <router-link v-for="(route) in rawRoutes" :to="route.path">{{ route.name }}</router-link>
       </nav>
       <hr />
     </div>
@@ -18,7 +13,9 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { rawRoutes } from './routes/router';
+</script>
 
 <style scoped>
 a {

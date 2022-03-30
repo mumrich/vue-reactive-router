@@ -1,4 +1,4 @@
-import HVue from "./H.vue";
+import FormVue from "./Form.vue";
 import HomeVue from "./Home.vue";
 import WidgetsVue from "./Widgets.vue";
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
@@ -11,9 +11,9 @@ export const rawRoutes = ref<RouteRecordRaw[]>([
     component: markRaw(HomeVue),
   },
   {
-    path: "/h",
-    name: "H",
-    component: markRaw(HVue),
+    path: "/form",
+    name: "form",
+    component: markRaw(FormVue),
   },
   {
     path: "/widgets",

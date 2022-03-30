@@ -4,7 +4,7 @@
     <section>
       <h2>h-input</h2>
       <p class="flex flex-row items-center">
-        <hInputVue v-model="hInputModel" label="h-input" placeholder="Please fill in..." />
+        <InputFieldVue v-model="hInputModel" label="h-input" placeholder="Please fill in..." />
         <span>
           <strong>hInputModel:</strong>
           {{ hInputModel }}
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import hInputVue from "@/components/h-input.vue";
+import InputFieldVue from "@/components/InputField.vue";
 import { ref } from "vue";
 
 const hInputModel = ref<string | number | null>("");
