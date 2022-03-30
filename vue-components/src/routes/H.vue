@@ -4,7 +4,7 @@
     <section>
       <h2>h-input</h2>
       <p>
-        <hInputVue v-model="hInputModel" />
+        <hInputVue v-model="hInputModel" label="TEST" />
         hInputModel: {{ hInputModel }}
       </p>
     </section>

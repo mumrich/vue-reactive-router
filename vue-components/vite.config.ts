@@ -1,5 +1,6 @@
 import Icons from "unplugin-icons/vite";
 import WindiCSS from "vite-plugin-windicss";
+import WindiCssConfig from "./windi.config";
 import dts from "vite-plugin-dts";
 import vue from "@vitejs/plugin-vue";
 import { defineConfig } from "vite";
@@ -36,7 +37,9 @@ export default defineConfig({
   plugins: [
     vue({}),
     Icons({ compiler: "vue3" }),
-    WindiCSS(),
+    WindiCSS({
+      config: WindiCssConfig,
+    }),
     dts({
       outputDir: "dist/types",
       insertTypesEntry: true,
