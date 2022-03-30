@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <span>{{ props.label }}</span>
-    <input v-model="model" :placeholder="props.label" />
+    <input v-model="model" :placeholder="props.placeholder" />
   </div>
 </template>
 
@@ -14,6 +14,11 @@ const props = defineProps({
     type: String as PropType<string | number | null>,
   },
   label: {
+    required: false,
+    default: "",
+    type: String as PropType<string>,
+  },
+  placeholder: {
     required: false,
     default: "",
     type: String as PropType<string>,
@@ -41,8 +46,15 @@ span {
 }
 
 input {
-  @apply shadow-inner;
   @apply p-1;
-  @apply border-none !important;
+  @apply bg-gray-50;
+  @apply border-none;
+  @apply rounded;
+}
+
+input:focus-visible {
+  @apply outline-none;
+  @apply bg-gray-100;
+  @apply shadow-inner;
 }
 </style>
