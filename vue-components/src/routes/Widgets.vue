@@ -1,29 +1,11 @@
 <template>
   <div class="flex flex-row h-full">
     <div class="available-container">
-      <draggable
-        v-model="availableWidgets"
-        class="bg-white p-5"
-        :group="{
-          name: draggableGroup,
-          pull: 'clone',
-          put: false,
-        }"
-      >
-        <template #item="{ element, index }">
-          <div class="available-widget">
-            {{ index + 1 }}: {{ element.component }}
-          </div>
-        </template>
-      </draggable>
+      <WidgetSource v-model="availableWidgets" />
     </div>
     <div class="configured-container">
-      <draggable
-        v-model="configureWigets"
-        class="bg-white p-5"
-        :group="draggableGroup"
-      >
-        <template #item="{ element, index }">
+      <WidgetField v-model="configureWigets">
+        <template #default="{ element, index }">
           <div class="configured-widget">
             {{ index + 1 }}: {{ element.component }}
             <IconFluentDelete16Regular
@@ -32,23 +14,32 @@
             />
           </div>
         </template>
-      </draggable>
+      </WidgetField>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { IVueWidget } from "@/contracts";
-import { ref } from "vue";
-import draggable from "vuedraggable";
+import { IVueWidget, IVueWidgetEditor } from "@/contracts";
+import { h, ref } from "vue";
 import IconFluentDelete16Regular from "~icons/fluent/delete-16-regular";
+import WidgetSource from "@/components/WidgetSource.vue";
+import WidgetField from "@/components/WidgetField.vue";
+import IconLogosMarkdown from "~icons/logos/markdown";
+import ImageLoremIpsum from "@/assets/lorem-ipsum.png";
 
-const draggableGroup = ref("widget");
-
-const availableWidgets = ref<IVueWidget[]>([
+const availableWidgets = ref<IVueWidgetEditor[]>([
   {
     component: "w-markdown",
     props: {},
+    title: "Markdown",
+    icon: IconLogosMarkdown,
+    preview: () => {
+      return h("img", {
+        src: ImageLoremIpsum,
+        style: { height: "100px" },
+      });
+    },
   },
 ]);
 
@@ -64,16 +55,17 @@ function onClickDeleteConfiguredWidget(index: number) {
   @apply bg-red-50 flex-1 flex flex-row justify-center;
 }
 
-.available-widget {
-  @apply shadow p-3 hover:bg-red-50 cursor-move;
+.configured-container {
+  @apply bg-blue-50 flex-1 flex flex-row justify-center;
 }
 
 .configured-widget {
-  @apply shadow p-3 hover:bg-blue-50 cursor-move;
+  @apply shadow p-3 cursor-move;
   @apply flex items-center;
+  @apply bg-white;
 }
 
-.configured-container {
-  @apply bg-blue-50 flex-1 flex flex-row justify-center;
+.configured-widget:hover {
+  @apply bg-blue-100;
 }
 </style>
