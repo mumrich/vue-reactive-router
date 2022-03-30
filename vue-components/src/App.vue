@@ -7,6 +7,7 @@
           ><img alt="Vue logo" src="./assets/logo.png" class="w-10" />
           Home</router-link
         >
+        <router-link to="/h">H</router-link>
         <router-link to="/widgets">Widgets</router-link>
       </nav>
       <hr />
